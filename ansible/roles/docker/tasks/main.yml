@@ -1,0 +1,70 @@
+# Description: main.yml - Ansible playbook
+# Author: Lorenzo Carneli <lorenzo.carneli@epitech.eu>
+
+- name: "Update apt packages"
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: "Install dependencies"
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg-agent
+      - software-properties-common
+      - python3
+      - python3-pip
+      - gnupg2
+      - pass
+    state: present
+
+- name: "Get docker gpg key"
+  ansible.builtin.apt_key:
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    state: present
+
+- name: "Add docker apt repository"
+  ansible.builtin.apt_repository:
+    update_cache: yes
+    repo: "deb https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: "Install docker and docker compose"
+  ansible.builtin.apt:
+    pkg:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose
+
+- name: "Install docker python sdk"
+  ansible.builtin.pip:
+    name: docker
+
+- name: "Download docker auto-completion"
+  ansible.builtin.get_url:
+    url: https://raw.githubusercontent.com/docker/cli/master/contrib/completion/bash/docker
+    dest: /etc/bash_completion.d/docker
+    mode: u=rw,g=r,o=r
+
+- name: "Enable bash auto-completion for root user"
+  ansible.builtin.blockinfile:
+    path: /root/.bashrc
+    block: |
+      if [ -f /etc/bash_completion ]; then
+        . /etc/bash_completion
+      fi
+
+- name: "Enable docker service"
+  ansible.builtin.systemd:
+    name: docker.service
+    state: restarted
+    enabled: yes
+
+- name: "Login to github docker registry"
+  community.docker.docker_login:
+    registry_url: "{{ registry.url }}"
+    username: "{{ registry.username | string }}"
+    password: "{{ registry.access_token | string }}"

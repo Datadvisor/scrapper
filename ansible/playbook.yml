@@ -1,0 +1,13 @@
+# Description: main.yml - Ansible playbook
+# Author: Lorenzo Carneli <lorenzo.carneli@epitech.eu>
+
+---
+- hosts: all
+  become: true
+  tasks:
+    - include_role:
+        name: "{{ role }}"
+      loop:
+        "{{ ansible_roles }}"
+      loop_control:
+        loop_var: role
