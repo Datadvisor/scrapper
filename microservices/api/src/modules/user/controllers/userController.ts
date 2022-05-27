@@ -4,6 +4,24 @@ import { StatusCodes } from 'http-status-codes';
 import UserHelper from '../helpers/userHelper';
 import UserService from '../services/userService';
 
+import { UserCreateDTO } from '../types/userType';
+import { hashPassword } from '../../../utils/hash';
+import { APIException } from '../../../exceptions/apiException';
+
+async function createUser(req: Request, res: Response): Promise<void> {
+	const payload: UserCreateDTO = req.body;
+	const userExists = await UserService.findByEmail(payload.email);
+
+	if (userExists) {
+		throw new APIException(StatusCodes.CONFLICT, 'A user with this email already exists.');
+	}
+
+	payload.password = await hashPassword(payload.password);
+	const newUser = await UserService.create(payload);
+
+	res.status(StatusCodes.CREATED).json(UserHelper.getUserRO(newUser));
+}
+
 async function getUser(req: Request, res: Response): Promise<void> {
 	res.status(StatusCodes.OK).json(UserHelper.getUserRO(req.user));
 }
@@ -21,6 +39,7 @@ async function deleteUser(req: Request, res: Response): Promise<void> {
 }
 
 export default {
+	createUser,
 	getUser,
 	getUsers,
 	deleteUser,
