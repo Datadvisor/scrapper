@@ -9,6 +9,7 @@ const redisClient = redis.createClient({
 		port: REDIS_CONFIG.port,
 	},
 	password: REDIS_CONFIG.password,
+	legacyMode: true,
 });
 
 redisClient.on('error', (event) => logger.error(event));

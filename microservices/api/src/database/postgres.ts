@@ -26,8 +26,8 @@ const postgresClient = new PrismaClient({
 	],
 });
 
-postgresClient.$on('error', (event: { message: string }) => logger.error(event.message));
-postgresClient.$on('warn', (event: { message: string }) => logger.warn(event.message));
-postgresClient.$on('info', (event: { message: string }) => logger.info(event.message));
+postgresClient.$on('error', (event) => logger.error(event.message));
+postgresClient.$on('warn', (event) => logger.warn(event.message));
+postgresClient.$on('info', (event) => logger.info(event.message));
 
 export default postgresClient;

@@ -8,6 +8,9 @@ const env = (key: string, required = true) => envVar.get(key).required(required)
 export const API_CONFIG = {
 	host: env('API_HOST').asString(),
 	port: env('API_PORT').asString(),
+	origin: env('API_ORIGIN').asString(),
+	saltRounds: env('API_SALT_ROUNDS').asInt(),
+	sessionSecret: env('API_SESSION_SECRET').asString(),
 	logAccessPath: env('API_ACCESS_LOG_PATH').asString(),
 	logCombinedPath: env('API_COMBINED_LOG_PATH').asString(),
 	logErrorPath: env('API_ERROR_LOG_PATH').asString(),
