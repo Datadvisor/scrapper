@@ -1,5 +1,5 @@
 import { Role, User } from '@prisma/client';
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
+import { IsEmail, IsOptional, IsString, MaxLength, MinLength } from 'class-validator';
 
 import { RO } from '../../../types/responseObject';
 
@@ -37,6 +37,18 @@ export class UserCreateDTO {
 	@MinLength(8, { message: 'Your password is too short.' })
 	@MaxLength(64, { message: 'Your password is too long.' })
 	password!: string;
+}
+
+export class UserUpdateDTO {
+    @IsEmail({ message: "This email is invalid. Make sure it's written like example@email.com." })
+    @IsOptional()
+    email?: string;
+
+    @IsString()
+    @MinLength(8, { message: 'Your password is too short.' })
+    @MaxLength(64, { message: 'Your password is too long.' })
+    @IsOptional()
+    password?: string;
 }
 
 export interface UserRO extends RO {

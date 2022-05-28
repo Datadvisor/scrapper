@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
 
 import postgresClient from '../../../database/postgres';
-import { UserCreateDTO } from '../types/userType';
+import { UserCreateDTO, UserUpdateDTO } from '../types/userType';
 
 async function create(payload: UserCreateDTO): Promise<User> {
 	return postgresClient.user.create({
@@ -27,6 +27,13 @@ async function findAll(): Promise<User[]> {
 	});
 }
 
+async function updateById(id: string, payload: UserUpdateDTO): Promise<User> {
+    return postgresClient.user.update({
+        where: { id },
+        data: payload,
+    });
+}
+
 async function deleteById(id: string): Promise<User> {
 	return postgresClient.user.delete({
 		where: { id },
@@ -38,5 +45,6 @@ export default {
 	findById,
 	findByEmail,
 	findAll,
+	updateById,
 	deleteById,
 };

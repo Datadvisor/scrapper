@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import UserHelper from '../helpers/userHelper';
 import UserService from '../services/userService';
 
-import { UserCreateDTO } from '../types/userType';
+import { UserCreateDTO, UserUpdateDTO } from '../types/userType';
 import { hashPassword } from '../../../utils/hash';
 import { APIException } from '../../../exceptions/apiException';
 
@@ -32,6 +32,18 @@ async function getUsers(req: Request, res: Response): Promise<void> {
 	res.status(StatusCodes.OK).json(users.map(UserHelper.getUserRO));
 }
 
+async function updateUser(req: Request, res: Response): Promise<void> {
+    const payload: UserUpdateDTO = req.body;
+
+    if (payload.password) {
+        payload.password = await hashPassword(payload.password);
+    }
+
+    const updatedUser = await UserService.updateById(req.user.id, payload);
+
+    res.status(StatusCodes.OK).json(updatedUser);
+}
+
 async function deleteUser(req: Request, res: Response): Promise<void> {
 	await UserService.deleteById(req.user.id);
 
@@ -42,5 +54,6 @@ export default {
 	createUser,
 	getUser,
 	getUsers,
+	updateUser,
 	deleteUser,
 };
