@@ -1,0 +1,47 @@
+name: Microservices CI Typescript Test
+
+on:
+  push:
+    branches:
+      - '**'
+    paths:
+      - '.github/workflows/test-typescript.yml'
+      - 'microservices/api/**'
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-ts:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        microservices: [ "api" ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 17.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 17.x
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.yarn
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+        working-directory: microservices/${{ matrix.microservices }}
+
+      - name: Run tests
+        run: yarn test
+        working-directory: microservices/${{ matrix.microservices }}
