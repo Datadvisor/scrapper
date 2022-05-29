@@ -49,6 +49,12 @@ export class UserUpdateDTO {
     @MaxLength(64, { message: 'Your password is too long.' })
     @IsOptional()
     password?: string;
+
+	@IsOptional()
+	resetPasswordToken?: string;
+
+	@IsOptional()
+	resetPasswordExpires?: Date;
 }
 
 export interface UserRO extends RO {

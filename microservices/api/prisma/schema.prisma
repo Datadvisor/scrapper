@@ -21,6 +21,8 @@ model User {
   lastName      String
   email         String      @unique
   password      String?
+  resetPasswordToken      String?   @unique
+  resetPasswordExpires    DateTime?
   role          Role        @default(USER)
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt

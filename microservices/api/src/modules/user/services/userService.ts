@@ -15,6 +15,12 @@ async function findById(id: string): Promise<User | null> {
 	});
 }
 
+async function findByResetToken(resetPasswordToken: string): Promise<User | null> {
+	return postgresClient.user.findUnique({
+		where: { resetPasswordToken },
+	});
+}
+
 async function findByEmail(email: string): Promise<User | null> {
 	return postgresClient.user.findUnique({
 		where: { email },
@@ -28,10 +34,10 @@ async function findAll(): Promise<User[]> {
 }
 
 async function updateById(id: string, payload: UserUpdateDTO): Promise<User> {
-    return postgresClient.user.update({
-        where: { id },
-        data: payload,
-    });
+	return postgresClient.user.update({
+		where: { id },
+		data: payload,
+	});
 }
 
 async function deleteById(id: string): Promise<User> {
@@ -47,4 +53,5 @@ export default {
 	findAll,
 	updateById,
 	deleteById,
+	findByResetToken,
 };
