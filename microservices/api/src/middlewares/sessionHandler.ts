@@ -8,7 +8,7 @@ const RedisStore = connectRedis(expressSession);
 
 const session = expressSession({
 	secret: API_CONFIG.sessionSecret,
-	cookie: { httpOnly: true, secure: 'auto' },
+	cookie: { httpOnly: false, secure: 'auto' },
 	resave: false,
 	saveUninitialized: false,
 	store: new RedisStore({ client: redisClient }),
