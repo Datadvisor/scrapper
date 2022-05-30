@@ -37,7 +37,7 @@ async function getUsers(req: Request, res: Response): Promise<void> {
 }
 
 async function updateUser(req: Request, res: Response): Promise<void> {
-	const payload: UserUpdateDTO = req.body;
+    const payload: UserUpdateDTO = req.body;
 
 	if (payload.password) {
 		payload.password = await hashPassword(payload.password);
@@ -45,7 +45,7 @@ async function updateUser(req: Request, res: Response): Promise<void> {
 
 	const updatedUser = await UserService.updateById(req.user.id, payload);
 
-	res.status(StatusCodes.OK).json(updatedUser);
+	res.sendStatus(StatusCodes.OK).json(updatedUser);
 }
 
 async function deleteUser(req: Request, res: Response): Promise<void> {
