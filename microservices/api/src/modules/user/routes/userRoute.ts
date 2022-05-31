@@ -14,6 +14,12 @@ userRouter.post('/', validate(UserCreateDTO), UserController.createUser);
 
 userRouter.get('/:userId', meHandler, authenticateOwner, userHandler, UserController.getUser);
 
+userRouter.post('/reset-password', UserController.askResetUserPassword);
+
+userRouter.post('/reset-password/verify/:token', UserController.checkResetUserPassword);
+
+userRouter.post('/reset-password/complete/:token', UserController.resetUserPassword);
+
 userRouter.get('/', authenticateAdmin, UserController.getUsers);
 
 userRouter.patch('/:userId', validate(UserUpdateDTO), meHandler, authenticateOwner, userHandler, UserController.updateUser);

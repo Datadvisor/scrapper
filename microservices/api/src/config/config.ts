@@ -14,6 +14,7 @@ export const API_CONFIG = {
 	logAccessPath: env('API_ACCESS_LOG_PATH').asString(),
 	logCombinedPath: env('API_COMBINED_LOG_PATH').asString(),
 	logErrorPath: env('API_ERROR_LOG_PATH').asString(),
+	sendGridApiKey: env('SEND_GRID_API_KEY').asString(),
 };
 
 export const POSTGRES_CONFIG = {

@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { v4 as uuidv4 } from 'uuid';
 
 import { API_CONFIG } from '../config/config';
 
@@ -10,4 +11,8 @@ function verifyPassword(password: string, encryptedPassword: string) {
 	return bcrypt.compare(password, encryptedPassword);
 }
 
-export { hashPassword, verifyPassword };
+function generatePasswordResetToken() {
+	return uuidv4();
+}
+
+export { hashPassword, verifyPassword, generatePasswordResetToken };
