@@ -4,7 +4,7 @@
     About: API Request
 """
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,4 +29,12 @@ app.add_middleware(
 
 @app.get("/search_by_name")
 async def search_by_name(query: str):
-    return JSONResponse(content=search_in_google(query))
+    response = search_in_google(query)
+
+    if 'Error' in response:
+        raise HTTPException(
+            status_code=400,
+            detail=response['Error']
+        )
+
+    return JSONResponse(content=response)

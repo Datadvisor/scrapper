@@ -5,7 +5,7 @@
 """
 
 from bs4 import BeautifulSoup
-import json
+from re import match
 
 from src.request_handler import make_req
 from src.page.page_scrapping import scrap_webpage
@@ -45,9 +45,28 @@ def get_google_results(html_source, username):
     return social_networks
 
 
-def search_in_google(username):
-    resp = make_req("https://www.google.com/search?&q=`%s`" % username)
+def sanity_check_query(query):
+    if query == '':
+        return {'Error': "Can't perform request for this query: %s" % query}
+
+    if query.isdigit():
+        return {'Error': "Cant perform request with digit query: %s" % query}
+
+    if match(r'^[_\W]+$', query):
+        return {'Error': "Can't perform request with only symbols: %s" % query}
+
+    return None
+
+
+def search_in_google(query):
+    result = sanity_check_query(query)
+
+    if result is not None:
+        return result
+
+    resp = make_req("https://www.google.com/search?&q=`%s`" % query)
 
     if resp is None:
-        return None
-    return get_google_results(resp['text'], username)
+        return {'Error': "Invalid Server Response"}
+
+    return get_google_results(resp['text'], query)
