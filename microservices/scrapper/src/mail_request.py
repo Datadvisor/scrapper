@@ -33,7 +33,7 @@ def search_mail(query: str) -> str:
 
     headers: dict = {
         "X-RapidAPI-Host": "breachdirectory.p.rapidapi.com",
-        "X-RapidAPI-Key": "38b4e8bfb6mshec6dc4ce99efd1ap121365jsn7c75210f493f"
+        "X-RapidAPI-Key": "21b19db5b0mshdac8d6de69d1dd5p1922f1jsn4ecadd1f5e9a"
     }
 
     if result is not None:
