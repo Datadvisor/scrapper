@@ -5,11 +5,14 @@
 """
 import random
 
+from fastapi import HTTPException
+from fastapi.responses import JSONResponse
+
 import requests as req
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from config.user_agent import userAgent
 
+from config.user_agent import userAgent
 
 def make_req(link):
     headers = {
@@ -34,3 +37,13 @@ def make_sel_req(link):
         return None
     driver.get(link)
     return driver
+
+
+def response_format(response):
+    if 'Error' in response:
+        raise HTTPException(
+            status_code=400,
+            detail=response['Error']
+        )
+
+    return JSONResponse(content=response)

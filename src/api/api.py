@@ -1,14 +1,17 @@
+#!/usr/bin/env python3
+
 """
-    Author: Lorenzo Carneli
-    Create on : 15/12/2021
-    About: API Request
+    Author: bricetoffolon
+    Created on: 01/06/2022
+    About: API handling with FASTAPI
 """
 
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.website.google_search_engine import search_in_google
+from src.mail_request import search_mail
+from src.request_handler import response_format
 
 app = FastAPI()
 
@@ -27,14 +30,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/search_by_name")
 async def search_by_name(query: str):
     response = search_in_google(query)
 
-    if 'Error' in response:
-        raise HTTPException(
-            status_code=400,
-            detail=response['Error']
-        )
+    return response_format(response)
 
-    return JSONResponse(content=response)
+
+@app.get("/search_by_mail")
+async def search_by_mail(query: str):
+    response = search_mail(query)
+
+    return response_format(response)
