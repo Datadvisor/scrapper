@@ -6,7 +6,13 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
+RUN pip3 install --upgrade pip
+RUN apt update
 RUN pip3 install -r requirements.txt
+RUN apt -y install ffmpeg libsm6 libxext6  -y
+RUN apt -y install poppler-utils
+RUN apt -y install tesseract-ocr
+RUN apt -y install libtesseract-dev
 
 RUN echo "$API_PORT"
 
