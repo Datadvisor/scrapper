@@ -6,9 +6,14 @@
     About: API handling with FASTAPI
 """
 
-from fastapi import FastAPI
+import os
+import shutil
+from datetime import datetime
+
+from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
+from src.cv.read import read_cv
 from src.website.google_search_engine import search_in_google
 from src.mail_request import search_mail
 from src.request_handler import response_format
@@ -20,6 +25,8 @@ origins = [
     "https://domainname.com",
     "http://localhost",
     "http://localhost:8080",
+    "http://localhost:3000",
+    "http://localhost:3001",
 ]
 
 app.add_middleware(
@@ -43,3 +50,21 @@ async def search_by_mail(query: str):
     response = search_mail(query)
 
     return response_format(response)
+
+
+@app.post("/cv/upload")
+async def create_upload_file(upload_file: UploadFile):
+    print(upload_file.filename)
+
+    try:
+        with open("data/" + upload_file.filename, "wb") as buffer:
+            shutil.copyfileobj(upload_file.file, buffer)
+    finally:
+        upload_file.file.close()
+
+    start_time = datetime.now()
+    res = read_cv("data/" + upload_file.filename)
+
+    print("Executed in: ", datetime.now() - start_time)
+    os.remove("data/" + upload_file.filename)
+    return res
