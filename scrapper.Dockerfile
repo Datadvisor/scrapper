@@ -1,6 +1,6 @@
 FROM python:3.9-slim-buster
 
-ARG API_PORT=80
+ARG API_PORT=8002
 
 WORKDIR /app
 

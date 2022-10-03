@@ -1,3 +1,5 @@
+from os import environ
+
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -17,7 +19,10 @@ def get_element_by_css(driver, css_element):
 def linkedin_scrapper(url):
     data_list = []
 
-    config = dotenv_values('.env')
+    try:
+        config = dotenv_values('.env')
+    except:
+        config = environ
 
     email = config['LINKEDIN_USERNAME']
     password = config['LINKEDIN_PASSWD']
