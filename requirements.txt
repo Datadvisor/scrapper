@@ -65,4 +65,11 @@ uvicorn
 webdriver-manager
 websockets
 wsproto
+opencv-python
+pytesseract
+tqdm
+matplotlib
+pdf2image
+numpy
+python-multipart
 zstandard
