@@ -9,7 +9,7 @@ from dotenv import dotenv_values
 
 def get_element_by_css(driver, css_element):
     try:
-        return driver.find_element_by_css_selector(css_element).text
+        return driver.find_element(By.CSS_SELECTOR,css_element).text
     except:
         return None
 
@@ -34,9 +34,9 @@ def linkedin_scrapper(url):
 
     driver = webdriver.Firefox(options=options)
     driver.get("https://www.linkedin.com/")
-    driver.find_element_by_css_selector('#session_key').send_keys(email)
-    driver.find_element_by_css_selector('#session_password').send_keys(password)
-    driver.find_element_by_class_name("sign-in-form__submit-button").click()
+    driver.find_element(By.CSS_SELECTOR, '#session_key').send_keys(email)
+    driver.find_element(By.CSS_SELECTOR,'#session_password').send_keys(password)
+    driver.find_element(By.CLASS_NAME, "sign-in-form__submit-button").click()
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "global-nav")))
     driver.get(url)
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "global-nav")))
