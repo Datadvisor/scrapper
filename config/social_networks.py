@@ -33,7 +33,6 @@ social_networks = \
                 'description': None,
             },
             'Twitter': {
-                'aaa': None,
                 'link': None,
                 'find': False,
                 'description': None,

@@ -19,9 +19,9 @@ def get_element_by_css(driver, css_element):
 def linkedin_scrapper(url):
     data_list = []
 
-    try:
+    if not dotenv_values('.env'):
         config = dotenv_values('.env')
-    except:
+    else:
         config = environ
 
     email = config['LINKEDIN_USERNAME']

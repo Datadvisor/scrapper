@@ -24,7 +24,7 @@ def sanity_check_query(query):
     return None
 
 
-def search_mail(query: str) -> str:
+def search_mail(query: str) -> dict:
     result = sanity_check_query(query)
 
     url: str = "https://breachdirectory.p.rapidapi.com/"
@@ -40,5 +40,17 @@ def search_mail(query: str) -> str:
         return result
 
     response: requests.request = requests.request("GET", url, headers=headers, params=querystring)
+
+    if not 200 <= response.status_code <= 209:
+        return {
+            "detail": "Internal Server Error"
+        }
+
+    if '"success": true' not in response.text:
+        return {
+            "success": "true",
+            "found": 0,
+            "result": []
+        }
 
     return response.json()
