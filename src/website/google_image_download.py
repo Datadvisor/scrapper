@@ -14,17 +14,18 @@ from os import mkdir, path
 
 from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
 from selenium.webdriver.firefox.options import Options
 
 
 def get_attributes(driver, locator, locator_path, attribute: str) -> str:
-    web_element = driver.find_element(locator, locator_path)
+    try:
+        web_element = driver.find_element(locator, locator_path)
+    except NoSuchElementException:
+        return None
 
-    if web_element:
-        return web_element.get_attribute(attribute)
-
-    return None
+    return web_element.get_attribute(attribute)
 
 
 def create_driver() -> webdriver:
@@ -47,34 +48,37 @@ def search_google_image(dir_name: str, query: str) -> dict:
     if not path.isdir(dir_name):
         mkdir(dir_name)
 
-    for i in range(1, 100):
+    for i in range(1, 50):
         try:
             img_element = driver.find_element(By.XPATH, f"//*[@id='islrg']/div[1]/div[{i}]/a[1]")
-            img_element.screenshot(f'{dir_name}/{i}.png')
+        except NoSuchElementException:
+            continue
 
-            img_element.click()
+        img_element.screenshot(f'{dir_name}/{i}.png')
+        img_element.click()
 
-            sleep(0.4)
+        sleep(0.4)
 
-            img_href = get_attributes(driver, By.XPATH,
-                                      '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[1]/a[1]',
-                                      'href')
+        img_href = get_attributes(driver, By.XPATH,
+                                  '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[1]/a[1]',
+                                  'href')
 
+        img_src = get_attributes(driver, By.XPATH,
+                                 '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
+                                 'src')
+
+        if 'data:image/' in img_src:
+            driver.refresh()
+            sleep(1)
             img_src = get_attributes(driver, By.XPATH,
                                      '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
                                      'src')
 
-            if 'data:image/' in img_src:
-                driver.refresh()
-                sleep(1)
-                img_src = get_attributes(driver, By.XPATH,
-                                         '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
-                                         'src')
+        if img_href is None or img_src is None:
+            remove(f'{dir_name}/{i}.png')
+            continue
 
-            images_to_compare[f'{i}'] = ({'src': img_src, 'href': img_href})
-
-        except:
-            break
+        images_to_compare[f'{i}'] = ({'src': img_src, 'href': img_href})
 
     driver.close()
 
