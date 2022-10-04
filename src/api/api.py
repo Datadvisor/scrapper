@@ -23,21 +23,6 @@ from src.face_recognition.face_processing import faces_compare
 
 app = FastAPI()
 
-origins = [
-    "http://domainname.com",
-    "https://domainname.com",
-    "http://localhost",
-    "http://localhost:8080",
-]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 @app.get("/search_by_name")
 async def search_by_name(query: str):
@@ -100,7 +85,3 @@ async def search_by_face(upload_file: UploadFile, query: str):
     os.remove(fp)
 
     return res
-
-
-
-
