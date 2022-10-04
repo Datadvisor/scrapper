@@ -44,6 +44,19 @@ def linkedin_scrapper(url):
     driver.find_element(By.CSS_SELECTOR, '#session_key').send_keys(email)
     driver.find_element(By.CSS_SELECTOR,'#session_password').send_keys(password)
     driver.find_element(By.CLASS_NAME, "sign-in-form__submit-button").click()
+
+    try:
+        with open('linkedin_response.html_2', 'w') as file:
+            file.write(driver.page_source)
+    except:
+        pass
+    try:
+        driver.get(url)
+        with open('linkedin_response.html_3', 'w') as file:
+            file.write(driver.page_source)
+    except:
+        pass
+
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "global-nav")))
     driver.get(url)
     WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.ID, "global-nav")))
@@ -53,3 +66,6 @@ def linkedin_scrapper(url):
             data_list.append("%s" % resp)
     print(data_list)
     return data_list
+
+if __name__ == "__main__":
+    linkedin_scrapper('https://www.linkedin.com/in/brice-toffolon/')
