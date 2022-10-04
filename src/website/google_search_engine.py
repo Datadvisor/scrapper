@@ -42,6 +42,18 @@ def get_google_results(html_source, username):
                     url = get_url_from_a_el(a)
                     if 'translate' not in url:
                         scrap_webpage(url, social_networks_list)
+
+    rest_of_list = [
+        {
+            'name': social_network,
+            'link': None,
+            'find': False,
+            'description': None
+        } for social_network in social_networks_list if sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1
+    ]
+
+    social_networks['SocialNetworks'] = social_networks['SocialNetworks'] + rest_of_list
+
     return social_networks
 
 
