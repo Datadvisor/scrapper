@@ -39,6 +39,8 @@ def linkedin_scrapper(url):
 
     driver = webdriver.Firefox(options=options)
     driver.get("https://www.linkedin.com/")
+    with open('linkedin_response.html', 'w') as file:
+        file.write(driver.page_source)
     driver.find_element(By.CSS_SELECTOR, '#session_key').send_keys(email)
     driver.find_element(By.CSS_SELECTOR,'#session_password').send_keys(password)
     driver.find_element(By.CLASS_NAME, "sign-in-form__submit-button").click()
