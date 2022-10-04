@@ -19,10 +19,10 @@ def get_element_by_css(driver, css_element):
 def linkedin_scrapper(url):
     data_list = []
 
-    try:
-        config = dotenv_values('.env')
-    except:
+    if not dotenv_values('.env'):
         config = environ
+    else:
+        config = dotenv_values('.env')
 
     email = config['LINKEDIN_USERNAME']
     password = config['LINKEDIN_PASSWD']
