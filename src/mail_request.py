@@ -11,7 +11,9 @@
 
 import requests
 
-from re import match
+from os import environ
+
+from dotenv import dotenv_values
 
 
 def sanity_check_query(query):
@@ -24,21 +26,38 @@ def sanity_check_query(query):
     return None
 
 
-def search_mail(query: str) -> str:
+def search_mail(query: str) -> dict:
     result = sanity_check_query(query)
 
     url: str = "https://breachdirectory.p.rapidapi.com/"
 
     querystring: dict = {"func": "auto", "term": query}
 
+    config = dotenv_values('.env')
+
+    if not config:
+        config = environ
+
     headers: dict = {
-        "X-RapidAPI-Host": "breachdirectory.p.rapidapi.com",
-        "X-RapidAPI-Key": "21b19db5b0mshdac8d6de69d1dd5p1922f1jsn4ecadd1f5e9a"
+        "X-RapidAPI-Host": config['BREACHDIRECTORY_RAPID_API_HOST'],
+        "X-RapidAPI-Key": config["BREACHDIRECTORY_RAPID_API_KEY"]
     }
 
     if result is not None:
         return result
 
     response: requests.request = requests.request("GET", url, headers=headers, params=querystring)
+
+    if not 200 <= response.status_code <= 209:
+        return {
+            "success": False,
+        }
+
+    if '"success": true' not in response.text:
+        return {
+            "success": True,
+            "found": 0,
+            "result": []
+        }
 
     return response.json()
