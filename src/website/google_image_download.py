@@ -67,7 +67,7 @@ def search_google_image(dir_name: str, query: str) -> dict:
                                  '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
                                  'src')
 
-        if 'data:image/' in img_src:
+        if img_src and 'data:image/' in img_src:
             driver.refresh()
             sleep(1)
             img_src = get_attributes(driver, By.XPATH,
