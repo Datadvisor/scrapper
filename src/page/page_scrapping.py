@@ -51,10 +51,15 @@ def scrap_webpage(url, social_network_list):
 
     for social_network in social_network_list:
         if social_network.lower() in url:
-            if social_networks['socialNetwork'][social_network]['find'] is False:
-                social_networks['socialNetwork'][social_network]['link'] = url
-                social_networks['socialNetwork'][social_network]['find'] = True
-                if scraper_function_list[social_network]:
-                    social_networks['socialNetwork'][social_network]['description'] = scraper_function_list[
-                        social_network](url)
+            if sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1:
+                social_networks['SocialNetworks'].append({
+                    'name': social_network,
+                    'link': url,
+                    'find': True,
+                    'description': scraper_function_list[social_network](url) if
+                    scraper_function_list[social_network] is not None else None
+                })
+
+    social_networks
+
     add_other_link(url)

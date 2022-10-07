@@ -77,11 +77,12 @@ async def search_by_face(upload_file: UploadFile, query: str):
     res = faces_compare(dir_name, fp, query)
 
     if type(res) is str:
-        HTTPException(
+        raise HTTPException(
             400,
-            detail={"data": res}
+            detail=res
         )
 
-    os.remove(fp)
+    if os.path.isfile(fp):
+        os.remove(fp)
 
     return res

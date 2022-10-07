@@ -11,7 +11,9 @@
 
 import requests
 
-from re import match
+from os import environ
+
+from dotenv import dotenv_values
 
 
 def sanity_check_query(query):
@@ -31,9 +33,14 @@ def search_mail(query: str) -> dict:
 
     querystring: dict = {"func": "auto", "term": query}
 
+    config = dotenv_values('.env')
+
+    if not config:
+        config = environ
+
     headers: dict = {
-        "X-RapidAPI-Host": "breachdirectory.p.rapidapi.com",
-        "X-RapidAPI-Key": "21b19db5b0mshdac8d6de69d1dd5p1922f1jsn4ecadd1f5e9a"
+        "X-RapidAPI-Host": config['BREACHDIRECTORY_RAPID_API_HOST'],
+        "X-RapidAPI-Key": config["BREACHDIRECTORY_RAPID_API_KEY"]
     }
 
     if result is not None:
@@ -43,12 +50,12 @@ def search_mail(query: str) -> dict:
 
     if not 200 <= response.status_code <= 209:
         return {
-            "detail": "Internal Server Error"
+            "success": False,
         }
 
     if '"success": true' not in response.text:
         return {
-            "success": "true",
+            "success": True,
             "found": 0,
             "result": []
         }
