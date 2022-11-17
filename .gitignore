@@ -132,3 +132,19 @@ dmypy.json
 
 # IDE
 .idea
+
+# MAC OS
+
+.no_sync
+.DS_Store
+
+# Firefox log
+
+geckodriver.log
+
+# metadata
+
+/data
+
+*.png
+*.jpg

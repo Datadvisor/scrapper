@@ -5,6 +5,8 @@
 """
 
 from src.website.linkedin import linkedin_scrapper
+from src.website.twitter import twitter_scrap_profile
+from src.website.instagram import instagram_scrap_profile
 from config.social_networks import social_networks
 
 
@@ -41,9 +43,9 @@ def scrap_webpage(url, social_network_list):
             'Google': None,
             'Youtube': None,
             'Facebook': None,
-            'Instagram': None,
+            'Instagram': instagram_scrap_profile,
             'Spotify': None,
-            'Twitter': None,
+            'Twitter': twitter_scrap_profile,
             'Steam': None,
             'Microsoft': None,
             'Linkedin': linkedin_scrapper
