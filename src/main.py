@@ -23,13 +23,6 @@ class Scrapper(ScrapperServiceServicer):
         query = request.firstName + ' ' + request.lastName
 
         response = search_in_google(query)
-        #
-        print(response['SocialNetworks'])
-        #
-        # print('OK---------------------------------')
-
-        #response = {'SocialNetworks':
-        #                [{'name': 'Google', 'link': None, 'found': False, 'metadata': [{'name': 't', 'value': 'df'}]}]}
 
         return GetByNameResponse(data=response['SocialNetworks'])
 
@@ -60,25 +53,19 @@ class Scrapper(ScrapperServiceServicer):
 
 
     async def GetByResume(self, request_iterator, context):
-        # data = bytearray()
-        # filepath = None
-        #
-        # async for request in request_iterator:
-        #     if request.metadata.filename and request.metadata.extension:
-        #         filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
-        #         continue
-        # data.extend(request.chunk_data)
-        # with open(filepath, 'wb') as f:
-        #     f.write(data)
-        #
-        # print(filepath)
-        #
-        # if filepath:
-        #     res = read_cv(filepath)
-        #
-        # print({"data": res[0]})
+        data = bytearray()
+        filepath = None
 
-        res = res = [{'emails': ['cabiac.iutp5@gmail.com', 'cabiac.tutpS@gqmail.com', 'contact@anthoni-marie.fr'], 'cities': ['\\% 0663059486', '% 0663059486', '&% 0663059486', '06630594386 contact@anthoni-marie.fr Ah'], 'addresses': [], 'phones': ['0663059486', '0663059438'], 'urls': []}]
+        async for request in request_iterator:
+            if request.metadata.filename and request.metadata.extension:
+                filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
+                continue
+        data.extend(request.chunk_data)
+        with open(filepath, 'wb') as f:
+            f.write(data)
+
+        if filepath:
+            res = read_cv(filepath)
 
         return GetByResumeResponse(data=res[0])
 
