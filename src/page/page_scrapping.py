@@ -4,9 +4,9 @@
     About : To scrap any page of socialNetwork
 """
 
-from src.website.linkedin import linkedin_scrapper
-from src.website.twitter import twitter_scrap_profile
-from src.website.instagram import instagram_scrap_profile
+from website.linkedin import linkedin_scrapper
+from website.twitter import twitter_scrap_profile
+from website.instagram import instagram_scrap_profile
 from config.social_networks import social_networks
 
 
@@ -57,8 +57,8 @@ def scrap_webpage(url, social_network_list):
                 social_networks['SocialNetworks'].append({
                     'name': social_network,
                     'link': url,
-                    'find': True,
-                    'description': scraper_function_list[social_network](url) if
+                    'found': True,
+                    'metadata': [{'name': f'{social_network}_infos', 'value': scraper_function_list[social_network](url)}] if
                     scraper_function_list[social_network] is not None else None
                 })
 

@@ -8,7 +8,7 @@ import cv2
 import pytesseract
 from os import path
 from matplotlib import pyplot as plt
-from src.cv.filters import filters_dictionary
+from cv.filters import filters_dictionary
 from pdf2image import convert_from_path
 
 SHOW_FILTERS = False
@@ -173,3 +173,6 @@ def read_cv(cv_path):
         report.write("\n\n")
     report.close()
     return final_res
+
+if __name__ == "__main__":
+    read_cv('/Users/bricetoffolon/Desktop/AnthoniMarieCV-2023.pdf')

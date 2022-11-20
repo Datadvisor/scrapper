@@ -30,7 +30,7 @@ def get_attributes(driver, locator, locator_path, attribute: str) -> str:
 
 def create_driver() -> webdriver:
     options = Options()
-    options.headless = True
+    #options.headless = True
 
     return webdriver.Firefox(options=options)
 

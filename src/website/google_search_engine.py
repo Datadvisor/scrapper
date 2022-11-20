@@ -7,8 +7,8 @@
 from bs4 import BeautifulSoup
 from re import match
 
-from src.request_handler import make_req
-from src.page.page_scrapping import scrap_webpage
+from request_handler import make_req
+from page.page_scrapping import scrap_webpage
 from config.social_networks import social_networks, social_networks_list, reset_social_networks
 
 
@@ -47,8 +47,8 @@ def get_google_results(html_source, username):
         {
             'name': social_network,
             'link': None,
-            'find': False,
-            'description': None
+            'found': False,
+            'metadata': None
         } for social_network in social_networks_list if sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1
     ]
 

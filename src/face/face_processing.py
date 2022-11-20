@@ -5,7 +5,7 @@
 
     Author: bricetoffolon
     Created on: 29/09/2022
-    About: 
+    About:
 
 """
 
@@ -27,7 +27,7 @@ import cv2
 
 from dotenv import dotenv_values
 
-from src.website.google_image_download import search_google_image
+from website.google_image_download import search_google_image
 
 
 def get_metadata(images_to_compare: dict, dir_name: str, img_id: str) -> None:
