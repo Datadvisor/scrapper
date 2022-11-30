@@ -1,22 +1,89 @@
-#!/bin/env python3
+import asyncio
+import logging
+
+import grpc
 
 from sys import argv
 
+from src.grpc_communication.scrapper.scrapper_pb2_grpc import ScrapperServiceServicer, \
+    add_ScrapperServiceServicer_to_server
+from src.grpc_communication.scrapper.scrapper_pb2 import GetByNameResponse, GetByEmailResponse, GetByFaceResponse, \
+    GetByResumeResponse
+
 from src.website.google_search_engine import search_in_google
-from datetime import datetime
+
+from src.mail_request import search_mail
+
+from src.face.face_processing import faces_compare
+
+from src.cv.read import read_cv
 
 
-def main():
-    start_time = datetime.now()
-    argc = len(argv)
+class Scrapper(ScrapperServiceServicer):
 
-    if argc != 3:
-        print('Usage:\n\tpython main.py [FirstName] [LastName]')
-        return -1
-    print(search_in_google("%s %s" % (argv[1], argv[2])))
-    print(datetime.now() - start_time)
-    return 0
+    async def GetByName(self, request, context) -> GetByNameResponse:
+        query = request.firstName + ' ' + request.lastName
+
+        response = search_in_google(query, request.demo)
+
+        return GetByNameResponse(data=response['SocialNetworks'])
+
+    async def GetByEmail(self, request, context) -> GetByEmailResponse:
+        response = search_mail(request.email)
+
+        return GetByEmailResponse(data=response['result'])
+
+    async def GetByFace(self, request_iterator, context) -> GetByFaceResponse:
+        data = bytearray()
+        filepath = None
+        query = None
+        res = None
+
+        async for request in request_iterator:
+            if request.metadata.filename and request.metadata.extension:
+                filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
+                query = f'{request.metadata.firstName} {request.metadata.lastName}'
+                continue
+            data.extend(request.chunk_data)
+            with open(filepath, 'wb') as f:
+                f.write(data)
+
+        if query and filepath:
+            res = faces_compare(f'data/{query.replace(" ", "")}', filepath, query)
+
+        return GetByFaceResponse(res)
+
+    async def GetByResume(self, request_iterator, context):
+        data = bytearray()
+        filepath = None
+
+        async for request in request_iterator:
+            if request.metadata.filename and request.metadata.extension:
+                filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
+                continue
+        data.extend(request.chunk_data)
+        with open(filepath, 'wb') as f:
+            f.write(data)
+
+        if filepath:
+            res = read_cv(filepath)
+
+        return GetByResumeResponse(data=res[0])
 
 
-if __name__ == "__main__":
-    main()
+async def serve(port) -> None:
+    server = grpc.aio.server()
+    listen_addr = f'[::]:{port}'
+
+    add_ScrapperServiceServicer_to_server(Scrapper(), server)
+    server.add_insecure_port(listen_addr)
+    logging.info("Starting server on %s", listen_addr)
+
+    await server.start()
+    await server.wait_for_termination()
+
+
+if __name__ == '__main__':
+    if len(argv) == 2:
+        logging.basicConfig(level=logging.INFO)
+        asyncio.run(serve(argv[1]))

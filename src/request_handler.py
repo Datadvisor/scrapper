@@ -12,7 +12,8 @@ import requests as req
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-from config.user_agent import userAgent
+from src.config.user_agent import userAgent
+
 
 def make_req(link):
     headers = {
@@ -24,7 +25,10 @@ def make_req(link):
         'Connection': 'keep-alive',
     }
 
-    resp = req.get(link, headers=headers)
+    try:
+        resp = req.get(link, headers=headers)
+    except Exception:
+        return None
 
     if resp.status_code != 200:
         return None

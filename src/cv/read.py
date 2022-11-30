@@ -8,7 +8,7 @@ import cv2
 import pytesseract
 from os import path
 from matplotlib import pyplot as plt
-from cv.filters import filters_dictionary
+from src.cv.filters import filters_dictionary
 from pdf2image import convert_from_path
 
 SHOW_FILTERS = False

@@ -32,12 +32,14 @@ class GetByFaceResponse(_message.Message):
     def __init__(self, data: _Optional[_Iterable[_Union[ScrapperFace, _Mapping]]] = ...) -> None: ...
 
 class GetByNameRequest(_message.Message):
-    __slots__ = ["firstName", "lastName"]
+    __slots__ = ["demo", "firstName", "lastName"]
+    DEMO_FIELD_NUMBER: _ClassVar[int]
     FIRSTNAME_FIELD_NUMBER: _ClassVar[int]
     LASTNAME_FIELD_NUMBER: _ClassVar[int]
+    demo: bool
     firstName: str
     lastName: str
-    def __init__(self, lastName: _Optional[str] = ..., firstName: _Optional[str] = ...) -> None: ...
+    def __init__(self, lastName: _Optional[str] = ..., firstName: _Optional[str] = ..., demo: bool = ...) -> None: ...
 
 class GetByNameResponse(_message.Message):
     __slots__ = ["data"]

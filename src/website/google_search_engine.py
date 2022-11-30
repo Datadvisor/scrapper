@@ -7,9 +7,9 @@
 from bs4 import BeautifulSoup
 from re import match
 
-from request_handler import make_req
-from page.page_scrapping import scrap_webpage
-from config.social_networks import social_networks, social_networks_list, reset_social_networks
+from src.request_handler import make_req
+from src.page.page_scrapping import scrap_webpage
+from src.config.social_networks import social_networks, social_networks_list, reset_social_networks
 
 
 def get_url_from_a_el(element):
@@ -32,9 +32,9 @@ def get_google_results(html_source, username):
 
     if soup is None:
         return None
-    with open('page_source_%s.html' % username, "w") as file:
-        file.write(html_source)
-        file.close()
+    # with open('page_source_%s.html' % username, "w") as file:
+    #     file.write(html_source)
+    #     file.close()
     for div in soup.findAll("div", class_="g"):
         for div_el in div.findAll("div"):
             if username.lower() in str(div_el).lower():
@@ -49,7 +49,8 @@ def get_google_results(html_source, username):
             'link': None,
             'found': False,
             'metadata': None
-        } for social_network in social_networks_list if sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1
+        } for social_network in social_networks_list if
+        sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1
     ]
 
     social_networks['SocialNetworks'] = social_networks['SocialNetworks'] + rest_of_list
@@ -70,7 +71,22 @@ def sanity_check_query(query):
     return None
 
 
-def search_in_google(query):
+def parse_results_for_demo(results):
+    demo_data = False
+
+    for website in results['SocialNetworks']:
+        if website['found'] is True and demo_data is False:
+            demo_data = True
+            continue
+
+        for element in website:
+            if element != "found":
+                website[element] = '*******' if element != "metadata" else [{"name": "*******", "value": "*******"}]
+
+    return results
+
+
+def search_in_google(query, demo):
     result = sanity_check_query(query)
 
     if result is not None:
@@ -81,4 +97,8 @@ def search_in_google(query):
     if resp is None:
         return {'Error': "Invalid Server Response"}
 
-    return get_google_results(resp['text'], query)
+    results = get_google_results(resp['text'], query)
+
+    if not demo:
+        return results
+    return parse_results_for_demo(results)

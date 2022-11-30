@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import grpc_communication.scrapper.scrapper_pb2 as scrapper__pb2
+import src.grpc_communication.scrapper.scrapper_pb2 as scrapper__pb2
 
 
 class ScrapperServiceStub(object):

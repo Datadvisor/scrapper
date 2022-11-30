@@ -32,4 +32,4 @@ ENV API_PORT_RUNTIME=$API_PORT
 
 COPY . /app
 
-CMD ["sh", "-c", "uvicorn src.api.api:app --host 0.0.0.0 --port ${API_PORT_RUNTIME}"]
+CMD ["sh", "-c", "python main.py ${API_PORT_RUNTIME}"]

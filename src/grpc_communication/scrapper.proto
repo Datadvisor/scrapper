@@ -11,8 +11,8 @@ service ScrapperService {
 
 message ScrapperName {
   string name = 1;
-  string link = 2;
-  bool found = 3;
+  optional string link = 2;
+  optional bool found = 3;
   repeated ScrapperMetadata metadata = 4;
 }
 
@@ -45,6 +45,7 @@ message ScrapperMetadata {
 message GetByNameRequest {
   string lastName = 1;
   string firstName = 2;
+  bool demo = 3;
 }
 
 message GetByNameResponse {

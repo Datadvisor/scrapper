@@ -4,13 +4,13 @@
     About : To scrap any page of socialNetwork
 """
 
-from page.parse_scrapping import parse_scrapping_results
+from src.page.parse_scrapping import parse_scrapping_results
 
-from website.linkedin import linkedin_scrapper
-from website.twitter import twitter_scrap_profile
-from website.instagram import instagram_scrap_profile
+from src.website.linkedin import linkedin_scrapper
+from src.website.twitter import twitter_scrap_profile
+from src.website.instagram import instagram_scrap_profile
 
-from config.social_networks import social_networks
+from src.config.social_networks import social_networks
 
 
 def get_siteURI_and_linkURI(url):
