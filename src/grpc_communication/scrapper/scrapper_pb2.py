@@ -13,43 +13,39 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0escrapper.proto\x12\x08scrapper\"\x84\x01\n\x0cScrapperName\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\x04link\x18\x02 \x01(\tH\x00\x88\x01\x01\x12\x12\n\x05\x66ound\x18\x03 \x01(\x08H\x01\x88\x01\x01\x12,\n\x08metadata\x18\x04 \x03(\x0b\x32\x1a.scrapper.ScrapperMetadataB\x07\n\x05_linkB\x08\n\x06_found\"d\n\rScrapperEmail\x12\x14\n\x0chas_password\x18\x01 \x01(\x08\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04sha1\x18\x03 \x01(\t\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12\x0f\n\x07sources\x18\x05 \x03(\t\"a\n\x0eScrapperResume\x12\x0e\n\x06\x65mails\x18\x01 \x03(\t\x12\x0e\n\x06\x63ities\x18\x02 \x03(\t\x12\x11\n\taddresses\x18\x03 \x03(\t\x12\x0e\n\x06phones\x18\x04 \x03(\t\x12\x0c\n\x04urls\x18\x05 \x03(\t\"J\n\x0cScrapperFace\x12\x0c\n\x04link\x18\x01 \x01(\t\x12,\n\x08metadata\x18\x04 \x03(\x0b\x32\x1a.scrapper.ScrapperMetadata\"/\n\x10ScrapperMetadata\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"E\n\x10GetByNameRequest\x12\x10\n\x08lastName\x18\x01 \x01(\t\x12\x11\n\tfirstName\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x65mo\x18\x03 \x01(\x08\"9\n\x11GetByNameResponse\x12$\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x16.scrapper.ScrapperName\"\"\n\x11GetByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\";\n\x12GetByEmailResponse\x12%\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x17.scrapper.ScrapperEmail\"5\n\x0eMetaDataResume\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\textension\x18\x02 \x01(\t\"c\n\x12GetByResumeRequest\x12,\n\x08metadata\x18\x01 \x01(\x0b\x32\x18.scrapper.MetaDataResumeH\x00\x12\x14\n\nchunk_data\x18\x02 \x01(\x0cH\x00\x42\t\n\x07request\"=\n\x13GetByResumeResponse\x12&\n\x04\x64\x61ta\x18\x01 \x01(\x0b\x32\x18.scrapper.ScrapperResume\"T\n\x08MetaData\x12\x10\n\x08\x66ilename\x18\x01 \x01(\t\x12\x11\n\textension\x18\x02 \x01(\t\x12\x10\n\x08lastName\x18\x03 \x01(\t\x12\x11\n\tfirstName\x18\x04 \x01(\t\"[\n\x10GetByFaceRequest\x12&\n\x08metadata\x18\x01 \x01(\x0b\x32\x12.scrapper.MetaDataH\x00\x12\x14\n\nchunk_data\x18\x02 \x01(\x0cH\x00\x42\t\n\x07request\"9\n\x11GetByFaceResponse\x12$\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x16.scrapper.ScrapperFace2\xb6\x02\n\x0fScrapperService\x12\x44\n\tGetByName\x12\x1a.scrapper.GetByNameRequest\x1a\x1b.scrapper.GetByNameResponse\x12G\n\nGetByEmail\x12\x1b.scrapper.GetByEmailRequest\x1a\x1c.scrapper.GetByEmailResponse\x12L\n\x0bGetByResume\x12\x1c.scrapper.GetByResumeRequest\x1a\x1d.scrapper.GetByResumeResponse(\x01\x12\x46\n\tGetByFace\x12\x1a.scrapper.GetByFaceRequest\x1a\x1b.scrapper.GetByFaceResponse(\x01\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0escrapper.proto\x12\x08scrapper\"g\n\x0cScrapperName\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x0c\n\x04link\x18\x02 \x01(\t\x12\r\n\x05\x66ound\x18\x03 \x01(\x08\x12,\n\x08metadata\x18\x04 \x03(\x0b\x32\x1a.scrapper.ScrapperMetadata\"d\n\rScrapperEmail\x12\x14\n\x0chas_password\x18\x01 \x01(\x08\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x0c\n\x04sha1\x18\x03 \x01(\t\x12\x0c\n\x04hash\x18\x04 \x01(\t\x12\x0f\n\x07sources\x18\x05 \x03(\t\"a\n\x0eScrapperResume\x12\x0e\n\x06\x65mails\x18\x01 \x03(\t\x12\x0e\n\x06\x63ities\x18\x02 \x03(\t\x12\x11\n\taddresses\x18\x03 \x03(\t\x12\x0e\n\x06phones\x18\x04 \x03(\t\x12\x0c\n\x04urls\x18\x05 \x03(\t\"J\n\x0cScrapperFace\x12\x0c\n\x04link\x18\x01 \x01(\t\x12,\n\x08metadata\x18\x04 \x03(\x0b\x32\x1a.scrapper.ScrapperMetadata\"/\n\x10ScrapperMetadata\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"E\n\x10GetByNameRequest\x12\x10\n\x08lastName\x18\x01 \x01(\t\x12\x11\n\tfirstName\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x65mo\x18\x03 \x01(\x08\"9\n\x11GetByNameResponse\x12$\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x16.scrapper.ScrapperName\"\"\n\x11GetByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\";\n\x12GetByEmailResponse\x12%\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x17.scrapper.ScrapperEmail\";\n\x12GetByResumeRequest\x12\x10\n\x08\x66ileName\x18\x01 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x02 \x01(\x0c\"=\n\x13GetByResumeResponse\x12&\n\x04\x64\x61ta\x18\x01 \x01(\x0b\x32\x18.scrapper.ScrapperResume\"^\n\x10GetByFaceRequest\x12\x10\n\x08lastName\x18\x01 \x01(\t\x12\x11\n\tfirstName\x18\x02 \x01(\t\x12\x10\n\x08\x66ileName\x18\x03 \x01(\t\x12\x13\n\x0b\x66ileContent\x18\x04 \x01(\x0c\"9\n\x11GetByFaceResponse\x12$\n\x04\x64\x61ta\x18\x01 \x03(\x0b\x32\x16.scrapper.ScrapperFace2\xb2\x02\n\x0fScrapperService\x12\x44\n\tGetByName\x12\x1a.scrapper.GetByNameRequest\x1a\x1b.scrapper.GetByNameResponse\x12G\n\nGetByEmail\x12\x1b.scrapper.GetByEmailRequest\x1a\x1c.scrapper.GetByEmailResponse\x12J\n\x0bGetByResume\x12\x1c.scrapper.GetByResumeRequest\x1a\x1d.scrapper.GetByResumeResponse\x12\x44\n\tGetByFace\x12\x1a.scrapper.GetByFaceRequest\x1a\x1b.scrapper.GetByFaceResponseb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'scrapper_pb2', globals())
 if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
-  _SCRAPPERNAME._serialized_start=29
-  _SCRAPPERNAME._serialized_end=161
-  _SCRAPPEREMAIL._serialized_start=163
-  _SCRAPPEREMAIL._serialized_end=263
-  _SCRAPPERRESUME._serialized_start=265
-  _SCRAPPERRESUME._serialized_end=362
-  _SCRAPPERFACE._serialized_start=364
-  _SCRAPPERFACE._serialized_end=438
-  _SCRAPPERMETADATA._serialized_start=440
-  _SCRAPPERMETADATA._serialized_end=487
-  _GETBYNAMEREQUEST._serialized_start=489
-  _GETBYNAMEREQUEST._serialized_end=558
-  _GETBYNAMERESPONSE._serialized_start=560
-  _GETBYNAMERESPONSE._serialized_end=617
-  _GETBYEMAILREQUEST._serialized_start=619
-  _GETBYEMAILREQUEST._serialized_end=653
-  _GETBYEMAILRESPONSE._serialized_start=655
-  _GETBYEMAILRESPONSE._serialized_end=714
-  _METADATARESUME._serialized_start=716
-  _METADATARESUME._serialized_end=769
-  _GETBYRESUMEREQUEST._serialized_start=771
-  _GETBYRESUMEREQUEST._serialized_end=870
-  _GETBYRESUMERESPONSE._serialized_start=872
-  _GETBYRESUMERESPONSE._serialized_end=933
-  _METADATA._serialized_start=935
-  _METADATA._serialized_end=1019
-  _GETBYFACEREQUEST._serialized_start=1021
-  _GETBYFACEREQUEST._serialized_end=1112
-  _GETBYFACERESPONSE._serialized_start=1114
-  _GETBYFACERESPONSE._serialized_end=1171
-  _SCRAPPERSERVICE._serialized_start=1174
-  _SCRAPPERSERVICE._serialized_end=1484
+  _SCRAPPERNAME._serialized_start=28
+  _SCRAPPERNAME._serialized_end=131
+  _SCRAPPEREMAIL._serialized_start=133
+  _SCRAPPEREMAIL._serialized_end=233
+  _SCRAPPERRESUME._serialized_start=235
+  _SCRAPPERRESUME._serialized_end=332
+  _SCRAPPERFACE._serialized_start=334
+  _SCRAPPERFACE._serialized_end=408
+  _SCRAPPERMETADATA._serialized_start=410
+  _SCRAPPERMETADATA._serialized_end=457
+  _GETBYNAMEREQUEST._serialized_start=459
+  _GETBYNAMEREQUEST._serialized_end=528
+  _GETBYNAMERESPONSE._serialized_start=530
+  _GETBYNAMERESPONSE._serialized_end=587
+  _GETBYEMAILREQUEST._serialized_start=589
+  _GETBYEMAILREQUEST._serialized_end=623
+  _GETBYEMAILRESPONSE._serialized_start=625
+  _GETBYEMAILRESPONSE._serialized_end=684
+  _GETBYRESUMEREQUEST._serialized_start=686
+  _GETBYRESUMEREQUEST._serialized_end=745
+  _GETBYRESUMERESPONSE._serialized_start=747
+  _GETBYRESUMERESPONSE._serialized_end=808
+  _GETBYFACEREQUEST._serialized_start=810
+  _GETBYFACEREQUEST._serialized_end=904
+  _GETBYFACERESPONSE._serialized_start=906
+  _GETBYFACERESPONSE._serialized_end=963
+  _SCRAPPERSERVICE._serialized_start=966
+  _SCRAPPERSERVICE._serialized_end=1272
 # @@protoc_insertion_point(module_scope)

@@ -33,40 +33,24 @@ class Scrapper(ScrapperServiceServicer):
 
         return GetByEmailResponse(data=response['result'])
 
-    async def GetByFace(self, request_iterator, context) -> GetByFaceResponse:
-        data = bytearray()
-        filepath = None
-        query = None
-        res = None
+    async def GetByFace(self, request, context) -> GetByFaceResponse:
+        query = request.firstName + ' ' + request.lastName
+        file_path = 'data/' + request.fileName
 
-        async for request in request_iterator:
-            if request.metadata.filename and request.metadata.extension:
-                filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
-                query = f'{request.metadata.firstName} {request.metadata.lastName}'
-                continue
-            data.extend(request.chunk_data)
-            with open(filepath, 'wb') as f:
-                f.write(data)
+        with open(file_path, 'wb') as file:
+            file.write(request.fileContent)
 
-        if query and filepath:
-            res = faces_compare(f'data/{query.replace(" ", "")}', filepath, query)
+        res = faces_compare('data/' + query.replace(' ', ''), file_path, query)
 
         return GetByFaceResponse(res)
 
-    async def GetByResume(self, request_iterator, context):
-        data = bytearray()
-        filepath = None
+    async def GetByResume(self, request, context):
+        file_path = 'data/' + request.fileName
 
-        async for request in request_iterator:
-            if request.metadata.filename and request.metadata.extension:
-                filepath = f'data/{request.metadata.filename.split("/")[-1]}{request.metadata.extension}'
-                continue
-        data.extend(request.chunk_data)
-        with open(filepath, 'wb') as f:
-            f.write(data)
+        with open(file_path, 'wb') as file:
+            file.write(request.fileContent)
 
-        if filepath:
-            res = read_cv(filepath)
+        res = read_cv(file_path)
 
         return GetByResumeResponse(data=res[0])
 

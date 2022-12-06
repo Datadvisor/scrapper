@@ -18,12 +18,16 @@ class GetByEmailResponse(_message.Message):
     def __init__(self, data: _Optional[_Iterable[_Union[ScrapperEmail, _Mapping]]] = ...) -> None: ...
 
 class GetByFaceRequest(_message.Message):
-    __slots__ = ["chunk_data", "metadata"]
-    CHUNK_DATA_FIELD_NUMBER: _ClassVar[int]
-    METADATA_FIELD_NUMBER: _ClassVar[int]
-    chunk_data: bytes
-    metadata: MetaData
-    def __init__(self, metadata: _Optional[_Union[MetaData, _Mapping]] = ..., chunk_data: _Optional[bytes] = ...) -> None: ...
+    __slots__ = ["fileContent", "fileName", "firstName", "lastName"]
+    FILECONTENT_FIELD_NUMBER: _ClassVar[int]
+    FILENAME_FIELD_NUMBER: _ClassVar[int]
+    FIRSTNAME_FIELD_NUMBER: _ClassVar[int]
+    LASTNAME_FIELD_NUMBER: _ClassVar[int]
+    fileContent: bytes
+    fileName: str
+    firstName: str
+    lastName: str
+    def __init__(self, lastName: _Optional[str] = ..., firstName: _Optional[str] = ..., fileName: _Optional[str] = ..., fileContent: _Optional[bytes] = ...) -> None: ...
 
 class GetByFaceResponse(_message.Message):
     __slots__ = ["data"]
@@ -48,38 +52,18 @@ class GetByNameResponse(_message.Message):
     def __init__(self, data: _Optional[_Iterable[_Union[ScrapperName, _Mapping]]] = ...) -> None: ...
 
 class GetByResumeRequest(_message.Message):
-    __slots__ = ["chunk_data", "metadata"]
-    CHUNK_DATA_FIELD_NUMBER: _ClassVar[int]
-    METADATA_FIELD_NUMBER: _ClassVar[int]
-    chunk_data: bytes
-    metadata: MetaDataResume
-    def __init__(self, metadata: _Optional[_Union[MetaDataResume, _Mapping]] = ..., chunk_data: _Optional[bytes] = ...) -> None: ...
+    __slots__ = ["fileContent", "fileName"]
+    FILECONTENT_FIELD_NUMBER: _ClassVar[int]
+    FILENAME_FIELD_NUMBER: _ClassVar[int]
+    fileContent: bytes
+    fileName: str
+    def __init__(self, fileName: _Optional[str] = ..., fileContent: _Optional[bytes] = ...) -> None: ...
 
 class GetByResumeResponse(_message.Message):
     __slots__ = ["data"]
     DATA_FIELD_NUMBER: _ClassVar[int]
     data: ScrapperResume
     def __init__(self, data: _Optional[_Union[ScrapperResume, _Mapping]] = ...) -> None: ...
-
-class MetaData(_message.Message):
-    __slots__ = ["extension", "filename", "firstName", "lastName"]
-    EXTENSION_FIELD_NUMBER: _ClassVar[int]
-    FILENAME_FIELD_NUMBER: _ClassVar[int]
-    FIRSTNAME_FIELD_NUMBER: _ClassVar[int]
-    LASTNAME_FIELD_NUMBER: _ClassVar[int]
-    extension: str
-    filename: str
-    firstName: str
-    lastName: str
-    def __init__(self, filename: _Optional[str] = ..., extension: _Optional[str] = ..., lastName: _Optional[str] = ..., firstName: _Optional[str] = ...) -> None: ...
-
-class MetaDataResume(_message.Message):
-    __slots__ = ["extension", "filename"]
-    EXTENSION_FIELD_NUMBER: _ClassVar[int]
-    FILENAME_FIELD_NUMBER: _ClassVar[int]
-    extension: str
-    filename: str
-    def __init__(self, filename: _Optional[str] = ..., extension: _Optional[str] = ...) -> None: ...
 
 class ScrapperEmail(_message.Message):
     __slots__ = ["has_password", "hash", "password", "sha1", "sources"]

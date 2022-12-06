@@ -24,12 +24,12 @@ class ScrapperServiceStub(object):
                 request_serializer=scrapper__pb2.GetByEmailRequest.SerializeToString,
                 response_deserializer=scrapper__pb2.GetByEmailResponse.FromString,
                 )
-        self.GetByResume = channel.stream_unary(
+        self.GetByResume = channel.unary_unary(
                 '/scrapper.ScrapperService/GetByResume',
                 request_serializer=scrapper__pb2.GetByResumeRequest.SerializeToString,
                 response_deserializer=scrapper__pb2.GetByResumeResponse.FromString,
                 )
-        self.GetByFace = channel.stream_unary(
+        self.GetByFace = channel.unary_unary(
                 '/scrapper.ScrapperService/GetByFace',
                 request_serializer=scrapper__pb2.GetByFaceRequest.SerializeToString,
                 response_deserializer=scrapper__pb2.GetByFaceResponse.FromString,
@@ -51,13 +51,13 @@ class ScrapperServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetByResume(self, request_iterator, context):
+    def GetByResume(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def GetByFace(self, request_iterator, context):
+    def GetByFace(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -76,12 +76,12 @@ def add_ScrapperServiceServicer_to_server(servicer, server):
                     request_deserializer=scrapper__pb2.GetByEmailRequest.FromString,
                     response_serializer=scrapper__pb2.GetByEmailResponse.SerializeToString,
             ),
-            'GetByResume': grpc.stream_unary_rpc_method_handler(
+            'GetByResume': grpc.unary_unary_rpc_method_handler(
                     servicer.GetByResume,
                     request_deserializer=scrapper__pb2.GetByResumeRequest.FromString,
                     response_serializer=scrapper__pb2.GetByResumeResponse.SerializeToString,
             ),
-            'GetByFace': grpc.stream_unary_rpc_method_handler(
+            'GetByFace': grpc.unary_unary_rpc_method_handler(
                     servicer.GetByFace,
                     request_deserializer=scrapper__pb2.GetByFaceRequest.FromString,
                     response_serializer=scrapper__pb2.GetByFaceResponse.SerializeToString,
@@ -131,7 +131,7 @@ class ScrapperService(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetByResume(request_iterator,
+    def GetByResume(request,
             target,
             options=(),
             channel_credentials=None,
@@ -141,14 +141,14 @@ class ScrapperService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/scrapper.ScrapperService/GetByResume',
+        return grpc.experimental.unary_unary(request, target, '/scrapper.ScrapperService/GetByResume',
             scrapper__pb2.GetByResumeRequest.SerializeToString,
             scrapper__pb2.GetByResumeResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def GetByFace(request_iterator,
+    def GetByFace(request,
             target,
             options=(),
             channel_credentials=None,
@@ -158,7 +158,7 @@ class ScrapperService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.stream_unary(request_iterator, target, '/scrapper.ScrapperService/GetByFace',
+        return grpc.experimental.unary_unary(request, target, '/scrapper.ScrapperService/GetByFace',
             scrapper__pb2.GetByFaceRequest.SerializeToString,
             scrapper__pb2.GetByFaceResponse.FromString,
             options, channel_credentials,

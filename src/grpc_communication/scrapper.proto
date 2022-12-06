@@ -5,14 +5,14 @@ package scrapper;
 service ScrapperService {
   rpc GetByName(GetByNameRequest) returns (GetByNameResponse);
   rpc GetByEmail(GetByEmailRequest) returns (GetByEmailResponse);
-  rpc GetByResume(stream GetByResumeRequest) returns (GetByResumeResponse);
-  rpc GetByFace(stream GetByFaceRequest) returns (GetByFaceResponse);
+  rpc GetByResume(GetByResumeRequest) returns (GetByResumeResponse);
+  rpc GetByFace(GetByFaceRequest) returns (GetByFaceResponse);
 }
 
 message ScrapperName {
   string name = 1;
-  optional string link = 2;
-  optional bool found = 3;
+  string link = 2;
+  bool found = 3;
   repeated ScrapperMetadata metadata = 4;
 }
 
@@ -60,34 +60,20 @@ message GetByEmailResponse {
   repeated ScrapperEmail data = 1;
 }
 
-message MetaDataResume {
-  string filename = 1;
-  string extension = 2;
-}
-
 message GetByResumeRequest {
-  oneof request {
-    MetaDataResume metadata = 1;
-    bytes chunk_data = 2;
-  }
+  string fileName = 1;
+  bytes fileContent = 2;
 }
 
 message GetByResumeResponse {
-    ScrapperResume data = 1;
-}
-
-message MetaData {
-  string filename = 1;
-  string extension = 2;
-  string lastName = 3;
-  string firstName = 4;
+  ScrapperResume data = 1;
 }
 
 message GetByFaceRequest {
-  oneof request {
-    MetaData metadata = 1;
-    bytes chunk_data = 2;
-  }
+  string lastName = 1;
+  string firstName = 2;
+  string fileName = 3;
+  bytes fileContent = 4;
 }
 
 message GetByFaceResponse {
