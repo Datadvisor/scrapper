@@ -5,14 +5,29 @@
 """
 import random
 
+import requests as req
+
+from time import sleep
+
+from bs4 import BeautifulSoup
+
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+
 from fastapi import HTTPException
 from fastapi.responses import JSONResponse
 
-import requests as req
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
-
 from src.config.user_agent import userAgent
+from src.proxy_handler import connect_selenium_to_a_proxy
+
+
+def find_elements(soup, tag: str, class_name: str) -> list:
+    elements = soup.findAll(tag, {"class": class_name})
+
+    if not elements:
+        return None
+
+    return elements
 
 
 def make_req(link):
@@ -35,12 +50,36 @@ def make_req(link):
     return {'code': resp.status_code, 'text': resp.text}
 
 
-def make_sel_req(link):
-    driver = webdriver.Chrome(ChromeDriverManager().install())
-    if driver is None:
-        return None
-    driver.get(link)
-    return driver
+def firefox_webdriver(use_proxy=False, headless=True) -> webdriver:
+    custom_webdriver = webdriver
+
+    if use_proxy:
+        custom_webdriver = connect_selenium_to_a_proxy(webdriver)
+
+    options = Options()
+
+    options.headless = headless
+
+    return custom_webdriver.Firefox(options=options)
+
+
+def get_page_soup(url, use_proxy=True, headless=True):
+    try:
+        driver = firefox_webdriver(use_proxy=use_proxy, headless=headless)
+
+        #driver.get('https://whatismyipaddress.com')
+        driver.get(url)
+
+        sleep(10)
+        page_source = driver.page_source
+    finally:
+        if driver:
+            driver.quit()
+
+    if page_source:
+        return BeautifulSoup(page_source, "html.parser")
+
+    return None
 
 
 def response_format(response):

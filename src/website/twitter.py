@@ -9,52 +9,20 @@
 
 """
 
-
-from time import sleep
-
-from re import findall, IGNORECASE
-
-from bs4 import BeautifulSoup
-
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.options import Options
-
-
-def find_elements(soup, tag: str, class_name: str) -> list:
-    elements = soup.findAll(tag, {"class": class_name})
-
-    if not elements:
-        return None
-
-    return elements
+from src.request_handler import get_page_soup, find_elements
 
 
 def twitter_scrap_profile(url):
-    data = []
+    soup = get_page_soup(url)
 
-    options = Options()
-    options.headless = True
-
-    driver = webdriver.Firefox(options=options)
-
-    driver.get(url)
-
-    sleep(10)
-
-    page_source = driver.page_source
-
-    soup = BeautifulSoup(page_source, "html.parser")
-
-    driver.close()
-
-    if page_source:
+    if soup:
         profil = find_elements(soup, 'div', 'css-1dbjc4n r-1ifxtd0 r-ymttw5 r-ttdzmv')
 
         if profil:
             profil_description = find_elements(profil[0], 'span', "css-901oao css-16my406 r-poiln3 r-bcqeeo r-qvutc0")
 
-            return ' '.join(element.text for element in profil_description)
+            if profil_description:
+                return ' '.join(element.text for element in profil_description)
 
     return None
 

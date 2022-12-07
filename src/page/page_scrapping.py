@@ -4,9 +4,12 @@
     About : To scrap any page of socialNetwork
 """
 
+from tldextract import extract
+
 from src.page.parse_scrapping import parse_scrapping_results
 
 from src.website.linkedin import linkedin_scrapper
+from src.website.sensitive_data import get_sensitive_data
 from src.website.twitter import twitter_scrap_profile
 from src.website.instagram import instagram_scrap_profile
 
@@ -40,7 +43,7 @@ def add_other_link(url):
         )
 
 
-def scrap_webpage(url, social_network_list):
+def scrap_webpage(url, social_network_list, username):
     scraper_function_list = \
         {
             'Google': None,
@@ -58,9 +61,7 @@ def scrap_webpage(url, social_network_list):
         if social_network.lower() in url:
             if sum([1 for el in social_networks['SocialNetworks'] if el['name'] == social_network]) != 1:
                 results = scraper_function_list[social_network](url) if scraper_function_list[social_network] else None
-
                 results = parse_scrapping_results(results)
-
                 social_networks['SocialNetworks'].append({
                     'name': social_network,
                     'link': url,
@@ -68,4 +69,13 @@ def scrap_webpage(url, social_network_list):
                     'metadata': results
                 })
 
-    add_other_link(url)
+                return
+
+    results = get_sensitive_data(url, username)
+
+    social_networks['SocialNetworks'].append({
+        'name': extract(url)[1],
+        'link': url,
+        'found': True,
+        'metadata': results if results else None
+    })

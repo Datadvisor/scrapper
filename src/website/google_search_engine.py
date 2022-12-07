@@ -11,7 +11,6 @@ from src.request_handler import make_req
 from src.page.page_scrapping import scrap_webpage
 from src.config.social_networks import social_networks, social_networks_list, reset_social_networks
 
-
 def get_url_from_a_el(element):
     start_string = 'href="'
     try:
@@ -30,18 +29,23 @@ def get_google_results(html_source, username):
     reset_social_networks()
     soup = BeautifulSoup(html_source, 'html.parser')
 
+    done = False
+
     if soup is None:
         return None
-    # with open('page_source_%s.html' % username, "w") as file:
-    #     file.write(html_source)
-    #     file.close()
     for div in soup.findAll("div", class_="g"):
         for div_el in div.findAll("div"):
             if username.lower() in str(div_el).lower():
                 for a in div_el.findAll("a", href=True):
                     url = get_url_from_a_el(a)
                     if 'translate' not in url:
-                        scrap_webpage(url, social_networks_list)
+                        scrap_webpage(url, social_networks_list, username)
+                        done = True
+                        break
+            if done:
+                done = False
+                break
+
 
     rest_of_list = [
         {

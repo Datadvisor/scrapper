@@ -10,13 +10,12 @@
 """
 
 from time import sleep
-from os import mkdir, path
+from os import mkdir, path, remove
 
-from seleniumwire import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
-from selenium.webdriver.firefox.options import Options
+from src.request_handler import firefox_webdriver
 
 
 def get_attributes(driver, locator, locator_path, attribute: str) -> str:
@@ -28,59 +27,55 @@ def get_attributes(driver, locator, locator_path, attribute: str) -> str:
     return web_element.get_attribute(attribute)
 
 
-def create_driver() -> webdriver:
-    options = Options()
-    #options.headless = True
-
-    return webdriver.Firefox(options=options)
-
-
 def search_google_image(dir_name: str, query: str) -> dict:
     images_to_compare: dict = {}
-    driver = create_driver()
 
-    driver.get(f'https://www.google.ca/imghp?q={query}')
-    driver.find_element(By.CSS_SELECTOR, "#L2AGLb > div").click()
+    try:
+        driver = firefox_webdriver(headless=False)
 
-    driver.find_element(By.CSS_SELECTOR,
-                        "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.RNNXgb > button > div > span > svg").click()
+        driver.get(f'https://www.google.ca/imghp?q={query}')
+        driver.find_element(By.CSS_SELECTOR, "#L2AGLb > div").click()
 
-    if not path.isdir(dir_name):
-        mkdir(dir_name)
+        driver.find_element(By.CSS_SELECTOR,
+                            "body > div.L3eUgb > div.o3j99.ikrT4e.om7nvf > form > div:nth-child(1) > div.A8SBwf > div.RNNXgb > button > div > span > svg").click()
 
-    for i in range(1, 50):
-        try:
-            img_element = driver.find_element(By.XPATH, f"//*[@id='islrg']/div[1]/div[{i}]/a[1]")
-        except NoSuchElementException:
-            continue
+        if not path.isdir(dir_name):
+            mkdir(dir_name)
 
-        img_element.screenshot(f'{dir_name}/{i}.png')
-        img_element.click()
+        for i in range(1, 50):
+            try:
+                img_element = driver.find_element(By.XPATH, f"//*[@id='islrg']/div[1]/div[{i}]/a[1]")
+            except NoSuchElementException:
+                continue
 
-        sleep(0.4)
+            img_element.screenshot(f'{dir_name}/{i}.png')
+            img_element.click()
 
-        img_href = get_attributes(driver, By.XPATH,
-                                  '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[1]/a[1]',
-                                  'href')
+            sleep(0.4)
 
-        img_src = get_attributes(driver, By.XPATH,
-                                 '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
-                                 'src')
+            img_href = get_attributes(driver, By.XPATH,
+                                      '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[3]/div[1]/a[1]',
+                                      'href')
 
-        if img_src and 'data:image/' in img_src:
-            driver.refresh()
-            sleep(1)
             img_src = get_attributes(driver, By.XPATH,
                                      '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
                                      'src')
 
-        if img_href is None or img_src is None:
-            remove(f'{dir_name}/{i}.png')
-            continue
+            if img_src and 'data:image/' in img_src:
+                driver.refresh()
+                sleep(1)
+                img_src = get_attributes(driver, By.XPATH,
+                                         '//*[@id="Sva75c"]/div/div/div[3]/div[2]/c-wiz/div/div[1]/div[1]/div[3]/div/a/img',
+                                         'src')
 
-        images_to_compare[f'{i}'] = ({'src': img_src, 'href': img_href})
+            if img_href is None or img_src is None:
+                remove(f'{dir_name}/{i}.png')
+                continue
 
-    driver.close()
+            images_to_compare[f'{i}'] = ({'src': img_src, 'href': img_href})
+    finally:
+        if driver:
+            driver.quit()
 
     return images_to_compare
 
