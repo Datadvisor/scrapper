@@ -17,8 +17,8 @@ from dotenv import dotenv_values
 def connect_selenium_to_a_proxy(webdriver):
     try:
         proxy_address = dotenv_values()['PROXY_ADDRESS']
-    except any:
-        proxy_address = environ()['PROXY_ADDRESS']
+    except KeyError:
+        proxy_address = environ['PROXY_ADDRESS']
 
     if not proxy_address:
         return None
