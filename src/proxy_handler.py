@@ -5,7 +5,7 @@
 
     Author: bricetoffolon
     Created on: 06/12/2022
-    About: 
+    About:
 
 """
 
@@ -20,8 +20,8 @@ def connect_selenium_to_a_proxy(webdriver):
     except KeyError:
         proxy_address = environ['PROXY_ADDRESS']
 
-    if not proxy_address:
-        return None
+    if not proxy_address or proxy_address.lower() == "none" or proxy_address.lower() == "null":
+        return webdriver
 
     webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
         "httpProxy": proxy_address,
