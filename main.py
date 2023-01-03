@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 
 import grpc
 
@@ -68,6 +69,5 @@ async def serve(port) -> None:
 
 
 if __name__ == '__main__':
-    if len(argv) == 2:
-        logging.basicConfig(level=logging.INFO)
-        asyncio.run(serve(argv[1]))
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(serve(os.getenv('GRPC_PORT')))

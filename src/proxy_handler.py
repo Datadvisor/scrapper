@@ -15,12 +15,19 @@ from dotenv import dotenv_values
 
 
 def connect_selenium_to_a_proxy(webdriver):
+    proxy_address = None
+
     try:
         proxy_address = dotenv_values()['PROXY_ADDRESS']
     except KeyError:
-        proxy_address = environ['PROXY_ADDRESS']
+        pass
 
-    if not proxy_address or proxy_address.lower() == "none" or proxy_address.lower() == "null":
+    try:
+        proxy_address = environ['PROXY_ADDRESS']
+    except KeyError:
+        pass
+
+    if not proxy_address:
         return webdriver
 
     webdriver.DesiredCapabilities.FIREFOX['proxy'] = {
