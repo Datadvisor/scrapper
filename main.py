@@ -43,7 +43,7 @@ class Scrapper(ScrapperServiceServicer):
 
         res = faces_compare('data/' + query.replace(' ', ''), file_path, query)
 
-        return GetByFaceResponse(res)
+        return GetByFaceResponse(data=res)
 
     async def GetByResume(self, request, context):
         file_path = 'data/' + request.fileName
