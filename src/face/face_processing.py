@@ -26,7 +26,7 @@ from src.website.google_image_download import search_google_image
 
 
 def get_metadata(images_to_compare: dict, dir_name: str, img_id: str, fp: str) -> None:
-    images_to_compare[img_id]['metadata'] = {}
+    images_to_compare[img_id]['metadata'] = [{}]
 
     img = Image.open(fp)
 
@@ -38,14 +38,18 @@ def get_metadata(images_to_compare: dict, dir_name: str, img_id: str, fp: str) -
 
 def faces_compare(dir_name: str, face_path: str, query) -> dict:
     try:
-        config = dotenv_values('.env')
+        api_key = dotenv_values('.env')['GOOGLE_CUSTOM_SEARCH_API_KEY']
     except Exception:
-        config = environ
+        api_key = None
 
-    if 'GOOGLE_CUSTOM_SEARCH_API_KEY' not in config:
+    try:
+        if not api_key:
+            api_key = environ['GOOGLE_CUSTOM_SEARCH_API_KEY']
+    except Exception:
+        api_key = None
+
+    if not api_key:
         return []
-
-    api_key = config['GOOGLE_CUSTOM_SEARCH_API_KEY']
 
     if not face_path.lower().endswith(('.png', '.jpg', '.jpeg')):
         return "Provide a image with a correct format: PNG, JPG OR JPEG"
@@ -88,4 +92,4 @@ def faces_compare(dir_name: str, face_path: str, query) -> dict:
 
     rmtree(dir_name)
 
-    return JSONResponse(content={'data': matched_face})
+    return matched_face

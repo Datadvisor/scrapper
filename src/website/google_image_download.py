@@ -55,7 +55,7 @@ def search_google_image(dir_name: str, query: str, api_key: str) -> dict:
 
     for idx, item in enumerate(resp['items']):
         if 'link' in item:
-            img_to_compare[str(idx)] = ({'src': item['link']})
+            img_to_compare[str(idx)] = ({'link': item['link']})
 
         if 'pagemap' in item and 'metatags' in item['pagemap']:
             for element in item['pagemap']['metatags']:
